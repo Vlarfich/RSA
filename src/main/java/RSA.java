@@ -45,7 +45,7 @@ public class RSA {
         p = largePrime(this.l / 2);
         do {
             q = largePrime(this.l / 2);
-        } while (!p.equals(q));
+        } while (p.equals(q));
         N = p.multiply(q);
         phi = getPhi(p, q);
         e = genE(phi);
@@ -88,6 +88,10 @@ public class RSA {
     {
         return (new BigInteger(message)).modPow(e, N).toByteArray();
     }
+
+    public static BigInteger encryptMont(BigInteger message, BigInteger e, BigInteger n) {
+        return new Montgomery(n).pow(message, e);
+    }
     //_______________________   Encr  _______________________\\
     //_______________________         _______________________\\
     //_______________________   Decr  _______________________\\
@@ -102,6 +106,11 @@ public class RSA {
     public byte[] decrypt(byte[] message) {
         return (new BigInteger(message)).modPow(d, N).toByteArray();
     }
+
+    public static BigInteger decryptMont(BigInteger message, BigInteger d, BigInteger n) {
+        return new Montgomery(n).pow(message, d);
+    }
+
     //_______________________   Decr  _______________________\\
     //_______________________         _______________________\\
     //_______________________   Utils  _______________________\\
